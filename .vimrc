@@ -1,9 +1,9 @@
-"___.   ___.
+"    				 ___.   ___.
 "__  _  ____  _  __ ____    ____ \_ |__ \_ |__    _______   ____
 "\ \/ \/ /\ \/ \/ //    \  /    \ | __ \ | __ \   \_  __ \_/ ___\
-"\     /  \     /|   |  \|   |  \| \_\ \| \_\ \   |  | \/\  \___
-"\/\_/    \/\_/ |___|  /|___|  /|___  /|___  / /\|__|    \___  >
-"\/      \/     \/     \/  \/            \/
+" \     /  \     /|   |  \|   |  \| \_\ \| \_\ \   |  | \/\  \___
+"  \/\_/    \/\_/ |___|  /|___|  /|___  /|___  / /\|__|    \___  >
+"                      \/      \/     \/     \/  \/            \/
 
 set nocompatible              " be iMproved, required
 
@@ -22,12 +22,12 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'tpope/vim-fugitive'
 Plugin 'mattn/emmet-vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'mileszs/ack.vim'
 Plugin 'git://git.wincent.com/command-t.git'
 Plugin 'fatih/vim-go'
 Plugin 'fatih/vim-nginx'
+Plugin 'vim-scripts/dbext.vim'
 Plugin 'derekwyatt/vim-scala'
-Plugin 'kien/ctrlp.vim'
-Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'SirVer/ultisnips'
@@ -41,6 +41,7 @@ Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'JazzCore/ctrlp-cmatcher'
 Plugin 'bling/vim-airline'
 Plugin 'cespare/vim-toml'
+Plugin 'nanotech/jellybeans.vim'
 
 
 " colorshemes
@@ -62,6 +63,7 @@ set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
 set ruler
 set history=1000
+set mouse=a
 
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
@@ -92,11 +94,11 @@ set foldmethod=syntax
 
 " speed up syntax highlighting
 syntax sync minlines=256
-set synmaxcol=128
+set synmaxcol=228
 set re=1
 
 
-set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+set statusline=%<%F\ %F%h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
 " colorscheme
 syntax enable
@@ -128,6 +130,8 @@ set nowritebackup
 set scrolljump=5
 set scrolloff=3
 
+" ========== MAPS ==========="
+"
 " Easy indents
 vnoremap < <gv
 vnoremap > >gv
@@ -172,9 +176,6 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-" Fast saving
-nmap <leader>w :w!<cr>
-
 
 " Select search pattern howewever do not jump to the next one
 nnoremap <leader>f *N
@@ -189,19 +190,24 @@ nnoremap N Nzzzv
 "nnoremap <leader>. :lcd %:p:h<CR>
 autocmd BufEnter * silent! lcd %:p:h
 
-" trim all whitespaces away
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-
+map  <leader>o <Esc>:echo expand('%:p')<Return>
 "Reindent whoel file
 map <F7> mzgg=G`z<CR>
 
+nmap <leader>s <Esc>:Ack!
+nmap <leader>ct :tabclose<CR>
 nmap <leader>l :tabn<CR>
 nmap <leader>h :tabp<CR>
+nmap ¬ :tabn<CR>
+nmap ˙ :tabp<CR>
 map <leader>a :tabnew ~/.vimrc<CR>
 map <leader>t :tabnew<CR>
 nnoremap <tab> <c-w>w
 nnoremap <Space> zA
 vnoremap <Space> zA
+
+nmap ( :lprevious<CR>
+nmap ) :lnext<CR>
 
 " ========== Mozzila autoreload ==========="
 autocmd BufWriteCmd *.html,*.css,*.gtpl :call Refresh_firefox()
@@ -498,15 +504,23 @@ let g:ctrlp_buftag_types = {
 
 " ==================== YouCompleteMe ====================
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_min_num_of_chars_for_completion = 4
 
 
 " ==================== ChooseWin ====================
 nmap  -  <Plug>(choosewin)
 
+
+" ==================== Tagbar ====================
+nmap _ :TagbarToggle<CR>
+
+
 " ==================== Pymode ====================
 let g:pymode_rope_lookup_project = 1
 let g:pymode_rope_complete_on_dot = 0
+let g:pymode_breakpoint = 1
+let g:pymode_rope_organize_imports_bind = '<C-c>ro'
+
 
 " ==================== DelimitMate ====================
 let g:delimitMate_expand_cr = 1
@@ -589,6 +603,7 @@ au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " <C-
 " Open nerdtree in current dir, write our own custom function because
 " NerdTreeToggle just sucks and doesn't work for buffers
 let NERDTreeShowBookmarks=1
+let NERDTreeIgnore=['\.pyc$', '\.orig$', '\~$']
 map <leader>n :NERDTreeToggle<CR>
 
 let g:user_emmet_install_global = 0
